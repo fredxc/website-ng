@@ -9,7 +9,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
   standalone: true,
   imports: [CommonModule, LottieComponent],
   template: `
-    <section id="home" class="min-h-screen flex items-center justify-center">
+    <section class="min-h-screen flex items-center justify-center">
       <div class="container mx-auto px-6 text-center">
         <div class="mb-8" [@fadeIn]>
           <img

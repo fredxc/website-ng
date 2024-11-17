@@ -13,7 +13,7 @@ import { ThemeService } from "../../services/theme.service";
     >
       <nav class="container mx-auto px-6 py-4">
         <div class="flex items-center justify-between">
-          <div>
+          <a href="#">
             <h1
               class="text-2xl leading-6 font-bold text-gray-900 dark:text-white"
             >
@@ -22,7 +22,7 @@ import { ThemeService } from "../../services/theme.service";
             <p class="text-sm text-gray-600 dark:text-gray-400">
               Frontend Specialist
             </p>
-          </div>
+          </a>
           <div class="flex items-center space-x-8">
             <ul class="flex space-x-8">
               <li
