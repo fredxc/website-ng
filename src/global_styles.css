@@ -11,7 +11,7 @@ body {
 }
 
 .dark {
-  @apply bg-black text-white;
+  @apply bg-slate-950 text-white;
 }
 
 /* Dark mode transitions */
