@@ -11,7 +11,7 @@ import { ThemeService } from "../../services/theme.service";
     <header
       class="fixed w-full bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm shadow-sm z-50"
     >
-      <nav class="container mx-auto px-6 py-4">
+      <nav class="container mx-auto px-6 py-4 max-w-screen-xl">
         <div class="flex items-center justify-between">
           <a href="#">
             <h1
