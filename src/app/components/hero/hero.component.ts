@@ -36,7 +36,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
         >
           <a
             href="#contact"
-            class="border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white px-8 py-3 rounded-lg hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-black transition-colors"
+            class="border-2 border-slate-950 dark:border-white text-gray-900 dark:text-white px-8 py-3 rounded-lg bg- hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-gray-900 transition-colors"
           >
             Contact Me
           </a>
@@ -47,14 +47,12 @@ import { trigger, transition, style, animate } from "@angular/animations";
           <ng-container *ngIf="isDark$ | async; else lightAnimation">
             <ng-lottie
               [options]="darkModeOptions"
-              (animationCreated)="onAnimationCreated($event)"
               [@fadeIn]="{ value: '', params: { delay: '600ms' } }"
             ></ng-lottie>
           </ng-container>
           <ng-template #lightAnimation>
             <ng-lottie
               [options]="lightModeOptions"
-              (animationCreated)="onAnimationCreated($event)"
               [@fadeIn]="{ value: '', params: { delay: '600ms' } }"
             ></ng-lottie>
           </ng-template>
@@ -90,8 +88,4 @@ export class HeroComponent {
   darkModeOptions: AnimationOptions = {
     path: "assets/animations/scrolldown-light.json",
   };
-
-  onAnimationCreated(animationItem: any): void {
-    console.log("Animation created:", animationItem);
-  }
 }

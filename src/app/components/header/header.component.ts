@@ -9,7 +9,7 @@ import { ThemeService } from "../../services/theme.service";
   imports: [CommonModule],
   template: `
     <header
-      class="fixed w-full bg-white/80 dark:bg-black/80 backdrop-blur-sm shadow-sm z-50"
+      class="fixed w-full bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm shadow-sm z-50"
     >
       <nav class="container mx-auto px-6 py-4">
         <div class="flex items-center justify-between">

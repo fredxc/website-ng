@@ -1,7 +1,7 @@
 import { ThemeService } from "./services/theme.service";
-import { CommonModule, AsyncPipe } from "@angular/common";
 import { HeroComponent } from "./components/hero/hero.component";
 import { AboutComponent } from "./components/about/about.component";
+import { CommonModule, AsyncPipe, Location } from "@angular/common";
 import { HeaderComponent } from "./components/header/header.component";
 import { ContactComponent } from "./components/contact/contact.component";
 import { ProjectsComponent } from "./components/projects/projects.component";
@@ -30,7 +30,7 @@ import {
   ],
   template: `
     <div [class.dark]="isDark$ | async" class="dark-mode-transition">
-      <div class="h-screen bg-white dark:bg-black">
+      <div class="h-screen bg-white dark:bg-slate-950">
         <app-header />
         <main class="h-screen" #mainContainer>
           <app-hero #section id="home"></app-hero>
@@ -51,47 +51,74 @@ export class AppComponent implements AfterViewInit {
   @ViewChild("mainContainer", { static: true })
   mainContainer!: ElementRef<HTMLElement>;
 
+  private isScrolling = false;
   private currentSectionIndex = 0;
+  private observer!: IntersectionObserver;
 
-  constructor(private themeService: ThemeService) {}
+  constructor(private themeService: ThemeService, private location: Location) {}
 
   ngAfterViewInit(): void {
-    // Listen to wheel events for smooth scroll snapping with timeout
     this.mainContainer.nativeElement.addEventListener("wheel", (event) =>
       this.onWheel(event)
     );
-  }
 
-  private isScrolling = false; // Flag to lock scrolling during transitions
+    const sectionElements = this.sections.toArray().map((s) => s.nativeElement);
 
-  onWheel(event: WheelEvent): void {
-    if (this.isScrolling) {
-      return; // Ignore the event if a scroll is already in progress
-    }
-
-    this.isScrolling = true; // Lock scrolling
-    event.preventDefault(); // Prevent default scrolling behavior
-
-    // Determine scroll direction
-    const direction = event.deltaY > 0 ? 1 : -1;
-
-    // Calculate the next section index
-    this.currentSectionIndex = Math.min(
-      Math.max(0, this.currentSectionIndex + direction),
-      this.sections.length - 1
+    // URL section update observer
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            this.currentSectionIndex = sectionElements.indexOf(entry.target);
+            const sectionId = entry.target.id;
+            this.updateURL(sectionId);
+          }
+        });
+      },
+      {
+        root: null,
+        threshold: 0.5,
+      }
     );
 
-    console.log("SECTION VALUE", this.currentSectionIndex);
+    sectionElements.forEach((element) => this.observer.observe(element));
+  }
 
-    // Smoothly scroll to the next section
+  private updateURL(sectionId: string): void {
+    this.location.replaceState(`#${sectionId}`);
+  }
+
+  // Snap scroll on wheel
+  onWheel(event: WheelEvent): void {
+    if (this.isScrolling) {
+      event.preventDefault();
+      return;
+    }
+
+    this.isScrolling = true;
+    event.preventDefault();
+
+    const direction = event.deltaY > 0 ? 1 : -1;
+
+    if (
+      (this.currentSectionIndex < 4 && direction === 1) ||
+      (this.currentSectionIndex > 0 && direction === -1)
+    )
+      this.currentSectionIndex += direction;
+
     const targetSection = this.sections.toArray()[this.currentSectionIndex];
     targetSection.nativeElement.scrollIntoView({
       behavior: "smooth",
     });
 
-    // Release scroll lock after the transition (timeout matches scroll duration)
     setTimeout(() => {
       this.isScrolling = false;
-    }, 500); // Adjust duration to match your smooth scroll behavior
+    }, 500);
+  }
+
+  ngOnDestroy(): void {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
   }
 }
